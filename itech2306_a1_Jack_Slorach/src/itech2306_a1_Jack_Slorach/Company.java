@@ -23,10 +23,43 @@ public class Company {
         this.sharePrice = sharePrice;
         this.minShares = min;
         this.maxShares = max;
+        // Add the Founder as the First Investor
         investors.add(new Investor(founderName, founderShares));
     }
 
     public String getName() {
         return name;
+    }
+
+    public double getSharePrice() {
+        return sharePrice;
+    }
+
+    public int getMinSharesPerInvestor() {
+        return minShares;
+    }
+
+    public int getMaxSharesPerInvestor() {
+        return maxShares;
+    }
+
+    // Add Investor if the share request is valid
+    public boolean addInvestor(String name, int sharesRequested) {
+        if (investors.size() >= 100) return false;
+        if (sharesRequested < minShares || sharesRequested > maxShares || sharesRequested > availableShares)
+            return false;
+
+        Investor newInvestor = new Investor(name, sharesRequested);
+        investors.add(newInvestor);
+        availableShares -= sharesRequested;
+        return true;
+    }
+    // Calculate total issued shares
+    public int getTotalIssuedShares() {
+        int total = 0;
+        for (Investor i : investors) {
+            total += i.getSharesOwned();
+        }
+        return total;
     }
 }
