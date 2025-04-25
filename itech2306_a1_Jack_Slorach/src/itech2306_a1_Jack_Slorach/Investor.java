@@ -1,11 +1,14 @@
 package itech2306_a1_Jack_Slorach;
-
+//===============================
+//CLASS: Investor.java
+//Represents a person who owns shares in a company
+//===============================
 public class Investor {
     private String name;
     private int sharesOwned;
     private double lastDividendAmount;
     private String lastDividendDate;
-    private Boolean vote; // true = yes, false = no, null = not voted
+    private Boolean vote; // true = yes, false = no, null = hasn’t voted
 
     public Investor(String name, int sharesOwned) {
         this.name = name;
@@ -20,12 +23,18 @@ public class Investor {
     public int getSharesOwned() {
         return sharesOwned;
     }
+    // Used when dividends are paid
     public void setLastDividend(String date, double amount) {
         this.lastDividendDate = date;
         this.lastDividendAmount = amount;
     }
+    // Record the shareholder's vote (true = yes, false = no, null = hasn't voted)
     public void setVote(Boolean vote) {
         this.vote = vote;
     }
 
+    // Used to check if they’ve already voted or not
+    public Boolean getVote() {
+        return vote;
+    }
 }
