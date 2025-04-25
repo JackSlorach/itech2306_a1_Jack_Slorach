@@ -1,6 +1,7 @@
 package itech2306_a1_Jack_Slorach;
 
 import java.util.ArrayList;
+import java.text.NumberFormat;
 
 public class Company {
     private String name;
@@ -62,4 +63,41 @@ public class Company {
         }
         return total;
     }
+    public void printInvestorList() {
+        int totalShares = getTotalIssuedShares();
+        NumberFormat percentFormat = NumberFormat.getPercentInstance();
+        percentFormat.setMinimumFractionDigits(1);
+
+        for (int i = 0; i < investors.size(); i++) {
+            Investor inv = investors.get(i);
+            double percentage = (double) inv.getSharesOwned() / totalShares;
+            System.out.printf(" %d. %s [%d shares, %.1f%%]%n", i + 1, inv.getName(), inv.getSharesOwned(), percentage * 100);
+        }
+
+        System.out.println("Total shares issued to shareholders: " + totalShares);
+    }
+    public void declareDividend(String date, double amountPerShare) {
+        this.currentDividend = new Dividend(date, amountPerShare);
+        double totalPaid = 0;
+        NumberFormat money = NumberFormat.getCurrencyInstance();
+
+        System.out.println("The following amounts will need to be paid to the investors:");
+        for (Investor inv : investors) {
+            double amount = inv.getSharesOwned() * amountPerShare;
+            inv.setLastDividend(date, amount);
+            totalPaid += amount;
+            System.out.println("  " + money.format(amount) + " - " + inv.getName());
+        }
+
+        System.out.println("Total amount being paid: " + money.format(totalPaid));
+    }
+    public void setVoteTopic(String topic) {
+        this.currentVote = new Vote(topic);
+
+        // Reset previous votes
+        for (Investor inv : investors) {
+            inv.setVote(null);
+        }
+    }
+
 }

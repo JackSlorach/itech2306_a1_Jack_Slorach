@@ -20,4 +20,12 @@ public class Investor {
     public int getSharesOwned() {
         return sharesOwned;
     }
+    public void setLastDividend(String date, double amount) {
+        this.lastDividendDate = date;
+        this.lastDividendAmount = amount;
+    }
+    public void setVote(Boolean vote) {
+        this.vote = vote;
+    }
+
 }
