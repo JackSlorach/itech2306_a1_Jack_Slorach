@@ -37,4 +37,14 @@ public class Investor {
     public Boolean getVote() {
         return vote;
     }
+ // Get the date of the last dividend received
+    public String getLastDividendDate() {
+        return lastDividendDate;
+    }
+
+    // Get the amount of the last dividend received
+    public double getLastDividendAmount() {
+        return lastDividendAmount;
+    }
+
 }

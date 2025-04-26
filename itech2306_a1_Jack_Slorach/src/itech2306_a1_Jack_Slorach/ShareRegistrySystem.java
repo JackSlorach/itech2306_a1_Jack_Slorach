@@ -25,6 +25,7 @@ public class ShareRegistrySystem {
 	            System.out.println("6. Set up Vote");
 	            System.out.println("7. Record Shareholder Vote");
 	            System.out.println("8. Close Voting and Show Results");
+	            System.out.println("9. Show Shareholder Info");
 	            System.out.println("0. Exit");
 	            System.out.print("Choice: ");
 	            int choice = Integer.parseInt(input.nextLine());
@@ -53,6 +54,9 @@ public class ShareRegistrySystem {
 	                    break;
 	                case 8:
 	                    endVoting();
+	                    break;
+	                case 9:
+	                    showShareholderInfo();
 	                    break;
 	                case 0:
 	                    running = false;
@@ -335,6 +339,76 @@ public class ShareRegistrySystem {
 
 			    vote.closeVote(); // lock it down so no more changes
 			    System.out.println("Voting is now closed.");
+			}
+			// ===============================
+			// FUNCTION: Show specific shareholder info (FR-10)
+			// ===============================
+			private void showShareholderInfo() {
+			    listCompanies();
+			    if (companies.isEmpty()) return;
+
+			    System.out.print("Select a company: ");
+			    int companyIndex = Integer.parseInt(input.nextLine()) - 1;
+
+			    if (companyIndex < 0 || companyIndex >= companies.size()) {
+			        System.out.println("Invalid selection.");
+			        return;
+			    }
+
+			    Company selectedCompany = companies.get(companyIndex);
+			    ArrayList<Investor> investors = selectedCompany.getInvestors();
+
+			    if (investors.isEmpty()) {
+			        System.out.println("No investors found for this company.");
+			        return;
+			    }
+
+			    // Show investors for selection
+			    for (int i = 0; i < investors.size(); i++) {
+			        System.out.printf("%d. %s\n", i + 1, investors.get(i).getName());
+			    }
+
+			    System.out.print("Select a shareholder to view details: ");
+			    int investorIndex = Integer.parseInt(input.nextLine()) - 1;
+
+			    if (investorIndex < 0 || investorIndex >= investors.size()) {
+			        System.out.println("Invalid selection.");
+			        return;
+			    }
+
+			    Investor selectedInvestor = investors.get(investorIndex);
+
+			    // Show the basic info
+			    System.out.println("\n=== Shareholder Info ===");
+			    System.out.println("Name: " + selectedInvestor.getName());
+			    System.out.println("Shares Owned: " + selectedInvestor.getSharesOwned());
+
+			    // Show most recent dividend info
+			    if (selectedInvestor.getLastDividendDate() != null) {
+			        System.out.printf("Last Dividend: $%.2f on %s\n", 
+			            selectedInvestor.getLastDividendAmount(), 
+			            selectedInvestor.getLastDividendDate()
+			        );
+			    } else {
+			        System.out.println("No dividend received yet.");
+			    }
+
+			    // Show vote info
+			    Vote vote = selectedCompany.getCurrentVote();
+			    Boolean voteStatus = selectedInvestor.getVote();
+
+			    if (vote != null) {
+			        System.out.println("Vote Topic: " + vote.getTopic());
+			        if (voteStatus == null) {
+			            System.out.println("Vote: Not yet voted");
+			        } else if (voteStatus) {
+			            System.out.println("Vote: In favour");
+			        } else {
+			            System.out.println("Vote: Against");
+			        }
+			    } else {
+			        System.out.println("No current vote set up.");
+			    }
 			}
 
 }
